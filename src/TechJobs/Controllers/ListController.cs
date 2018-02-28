@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TechJobs.Models;
 
+
 namespace TechJobs.Controllers
 {
     public class ListController : Controller
@@ -29,6 +30,10 @@ namespace TechJobs.Controllers
 
         public IActionResult Values(string column)
         {
+            if (column == null)
+            {
+                column = "all";
+            }
             if (column.Equals("all"))
             {
                 List<Dictionary<string, string>> jobs = JobData.FindAll();
@@ -40,14 +45,15 @@ namespace TechJobs.Controllers
             {
                 List<string> items = JobData.FindAll(column);
                 ViewBag.title =  "All " + columnChoices[column] + " Values";
-                ViewBag.column = column;
+                ViewBag.columns = column;
                 ViewBag.items = items;
                 return View();
             }
         }
 
         public IActionResult Jobs(string column, string value)
-        {
+        {   
+            
             List<Dictionary<String, String>> jobs = JobData.FindByColumnAndValue(column, value);
             ViewBag.title = "Jobs with " + columnChoices[column] + ": " + value;
             ViewBag.jobs = jobs;
